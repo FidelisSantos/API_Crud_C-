@@ -53,10 +53,7 @@ namespace API_CRUD.Controller
     [Route("{email}")]
     public IActionResult UpdateModel([FromRoute] string email, [FromBody] UserRequest updateUserRequest)
     {
-      UserModel model = new UserModel();
-      model.name = updateUserRequest.name;
-      model.cpf = updateUserRequest.cpf;
-      model.email = updateUserRequest.email;
+      var model = _mapper.Map<UserModel>(updateUserRequest);
       var updateUser = services.Update(email, model);
       return updateUser != null ? Ok(updateUser) : NotFound(notFound);
 
