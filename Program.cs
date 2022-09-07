@@ -1,6 +1,8 @@
 using API_CRUD.Interfaces;
 using API_CRUD.Services;
 using API_CRUD.Repository;
+using AutoMapper;
+using API_CRUD.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddSingleton<IUserRepository, UserList>();
+builder.Services.AddAutoMapper(typeof(UserProfile));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/46ead967-ddf8-4ad2-b184-36b093e02662/microsoft.web/sites/subscriptions/46ead967-ddf8-4ad2-b184-36b093e02662/resourceGroups/API/providers/Microsoft.Web/sites/api-c-primeira",
+  "appService.deploySubpath": "bin/Release/net6.0/publish"
+}

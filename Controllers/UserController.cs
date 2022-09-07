@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using API_CRUD.Request;
 using API_CRUD.Models;
 using API_CRUD.Interfaces;
+using AutoMapper;
 
 namespace API_CRUD.Controller
 {
@@ -14,8 +15,15 @@ namespace API_CRUD.Controller
     private string notFound = "Usuário não encontrado";
     private string notFoundAll = "Nenhum Usuário encontrado";
     private IUserServices services;
+    private readonly IMapper _mapper;
 
-    public UserController(IUserServices services) => this.services = services;
+    public UserController(IUserServices services, IMapper mapper)
+    {
+      this.services = services;
+      _mapper = mapper;
+    }
+
+
 
     [HttpGet]
     public IActionResult FindAll()
@@ -27,11 +35,9 @@ namespace API_CRUD.Controller
     [HttpPost]
     public IActionResult NewModel([FromBody] UserRequest newUserRequest)
     {
-      UserModel model = new UserModel();
-      model.name = newUserRequest.name;
-      model.cpf = newUserRequest.cpf;
-      model.email = newUserRequest.email;
+      var model = _mapper.Map<UserModel>(newUserRequest);
       var newUser = services.Create(model);
+
       return newUser != null ? Created("", newUser) : BadRequest();
     }
 
