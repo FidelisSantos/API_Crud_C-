@@ -3,8 +3,6 @@ using API_CRUD.Services;
 using API_CRUD.Repository;
 using AutoMapper;
 using API_CRUD.Profiles;
-using FluentValidation;
-using API_CRUD.Validator;
 
 var builder = WebApplication.CreateBuilder(args);
 
