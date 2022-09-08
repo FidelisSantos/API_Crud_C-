@@ -10,6 +10,8 @@ namespace API_CRUD.Interfaces
     UserModel Update(string email, UserModel updateUser);
     bool Delete(string email);
 
-    bool Exist(string email);
+    bool ExistEmail(string email);
+    bool ExistCpf(long cpf);
+
   }
 }

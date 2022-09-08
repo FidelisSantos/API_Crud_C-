@@ -8,9 +8,8 @@ namespace API_CRUD.Profiles
   {
     public UserProfile()
     {
-      CreateMap<UserRequest, UserModel>();
-      CreateMap<UserModel, UserRequest>();
-
+      CreateMap<UserRequest, UserModel>()
+        .ReverseMap();
     }
   }
 }

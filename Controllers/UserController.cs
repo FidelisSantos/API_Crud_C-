@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using API_CRUD.Request;
 using API_CRUD.Models;
 using API_CRUD.Interfaces;
+using API_CRUD.Validator;
 using AutoMapper;
 
 namespace API_CRUD.Controller
@@ -37,7 +38,6 @@ namespace API_CRUD.Controller
     {
       var model = _mapper.Map<UserModel>(newUserRequest);
       var newUser = services.Create(model);
-
       return newUser != null ? Created("", newUser) : BadRequest();
     }
 
@@ -54,9 +54,8 @@ namespace API_CRUD.Controller
     public IActionResult UpdateModel([FromRoute] string email, [FromBody] UserRequest updateUserRequest)
     {
       var model = _mapper.Map<UserModel>(updateUserRequest);
-      var updateUser = services.Update(email, model);
+      var updateUser = services.Update(email, updateUserRequest.cpf, model);
       return updateUser != null ? Ok(updateUser) : NotFound(notFound);
-
     }
 
     [HttpDelete]

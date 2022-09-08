@@ -21,9 +21,14 @@ namespace API_CRUD.Repository
 
     }
 
-    public bool Exist(string email)
+    public bool ExistEmail(string email)
     {
       return models.Any(u => u.email == email);
+    }
+
+    public bool ExistCpf(long cpf)
+    {
+      return models.Any(u => u.cpf == cpf);
     }
 
     public UserModel Find(string email)

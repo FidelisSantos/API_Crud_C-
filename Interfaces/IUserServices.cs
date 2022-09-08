@@ -9,7 +9,7 @@ namespace API_CRUD.Interfaces
     List<UserModel> Search();
     UserModel Search(string email);
     UserModel Create(UserModel newUser);
-    UserModel Update(string email, UserModel updateUser);
+    UserModel Update(string email, long cpf, UserModel updateUser);
     bool Delete(string email);
 
   }

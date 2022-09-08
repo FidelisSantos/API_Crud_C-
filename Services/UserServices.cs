@@ -1,5 +1,6 @@
 using API_CRUD.Interfaces;
 using API_CRUD.Models;
+using API_CRUD.Validator;
 
 namespace API_CRUD.Services
 {
@@ -7,11 +8,14 @@ namespace API_CRUD.Services
   public class UserServices : IUserServices
   {
     private IUserRepository repository;
+    private UserValidator validator = new UserValidator();
+
     public UserServices(IUserRepository repository) => this.repository = repository;
     public UserModel Create(UserModel newUser)
     {
-      if (!repository.Exist(newUser.email))
+      if (!repository.ExistEmail(newUser.email) && !repository.ExistCpf(newUser.cpf))
       {
+        Validate(newUser);
         return repository.Create(newUser);
       }
       return null;
@@ -31,17 +35,63 @@ namespace API_CRUD.Services
       return getData;
     }
 
-    public UserModel Update(string email, UserModel updateUser)
+    public UserModel Update(string email, long cpf, UserModel updateUser)
     {
-      if (repository.Exist(email))
+      if (Search(email) != null)
       {
-        if (updateUser.cpf == null) throw new Exception("preencha o cpf");
-        if (updateUser.email == null) throw new Exception("preencha o email");
-        if (updateUser.name == null) throw new Exception("preencha o Nome");
-
-        return repository.Update(email, updateUser);
+        if (updateUser.email == email)
+        {
+          var user = Search(email);
+          if (user.cpf == updateUser.cpf)
+          {
+            Validate(updateUser);
+            return repository.Update(email, updateUser);
+          }
+          else if (!repository.ExistCpf(updateUser.cpf))
+          {
+            Validate(updateUser);
+            return repository.Update(email, updateUser);
+          }
+          else
+          {
+            throw new Exception("CPF já existe na base");
+          }
+        }
+        else if (!repository.ExistEmail(updateUser.email))
+        {
+          var user = Search(email);
+          if (user.cpf == updateUser.cpf)
+          {
+            Validate(updateUser);
+            return repository.Update(email, updateUser);
+          }
+          else if (!repository.ExistCpf(updateUser.cpf))
+          {
+            Validate(updateUser);
+            return repository.Update(email, updateUser);
+          }
+          else
+          {
+            throw new Exception("CPF já existe na base");
+          }
+        }
+        else
+        {
+          throw new Exception("Email já existe na base");
+        }
       }
       return null;
+    }
+
+    private void Validate(UserModel model)
+    {
+      var validationResult = validator.Validate(model);
+      if (!validationResult.IsValid)
+      {
+        var erros = validationResult.Errors.Select(x => x.ErrorMessage);
+        string erroFormatter = string.Join(" ", erros);
+        throw new Exception(erroFormatter);
+      }
     }
   }
 }
