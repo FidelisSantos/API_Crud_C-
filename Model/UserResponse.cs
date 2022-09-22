@@ -1,6 +1,6 @@
-namespace API_CRUD.View
+namespace API_CRUD.Response
 {
-  public class UserView
+  public class UserResponse
   {
     public long cpf { get; set; }
     public string? name { get; set; }

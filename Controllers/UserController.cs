@@ -3,7 +3,7 @@ using API_CRUD.Request;
 using API_CRUD.Models;
 using API_CRUD.Interfaces;
 using AutoMapper;
-using API_CRUD.View;
+using API_CRUD.Response;
 
 namespace API_CRUD.Controller
 {
@@ -30,8 +30,8 @@ namespace API_CRUD.Controller
     public IActionResult FindAll()
     {
       var users = services.Search();
-      var userViews = _mapper.Map<List<UserView>>(users);
-      return (userViews == null || !userViews.Any() ? NotFound(notFoundAll) : Ok(userViews));
+      var userResponses = _mapper.Map<List<UserResponse>>(users);
+      return (userResponses == null || !userResponses.Any() ? NotFound(notFoundAll) : Ok(userResponses));
     }
 
     [HttpPost]
@@ -39,8 +39,8 @@ namespace API_CRUD.Controller
     {
       var model = _mapper.Map<UserModel>(newUserRequest);
       var newUser = services.Create(model);
-      var userView = _mapper.Map<UserView>(newUser);
-      return userView != null ? Created("", userView) : BadRequest();
+      var userResponse = _mapper.Map<UserResponse>(newUser);
+      return userResponse != null ? Created("", userResponse) : BadRequest();
     }
 
     [HttpGet]
@@ -48,8 +48,8 @@ namespace API_CRUD.Controller
     public IActionResult FindModel([FromRoute] string email)
     {
       var user = services.Search(email);
-      var userView = _mapper.Map<UserView>(user);
-      return userView != null ? Ok(userView) : NotFound(notFound);
+      var userResponse = _mapper.Map<UserResponse>(user);
+      return userResponse != null ? Ok(userResponse) : NotFound(notFound);
     }
 
     [HttpPut]
@@ -58,8 +58,8 @@ namespace API_CRUD.Controller
     {
       var model = _mapper.Map<UserModel>(updateUserRequest);
       var updateUser = services.Update(email, updateUserRequest.cpf, model);
-      var userView = _mapper.Map<UserView>(updateUser);
-      return userView != null ? Ok(userView) : NotFound(notFound);
+      var userResponse = _mapper.Map<UserResponse>(updateUser);
+      return userResponse != null ? Ok(userResponse) : NotFound(notFound);
     }
 
     [HttpDelete]
