@@ -2,7 +2,7 @@ using API_CRUD.Models;
 using API_CRUD.Request;
 using AutoMapper;
 
-namespace API_CRUD.Profiles
+namespace API_CRUD.DTO
 {
   public class UserProfile : Profile
   {
