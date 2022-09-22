@@ -1,5 +1,6 @@
 using API_CRUD.Models;
 using System.Text.RegularExpressions;
+using System.ComponentModel.DataAnnotations;
 using FluentValidation;
 
 namespace API_CRUD.Validator
@@ -10,32 +11,31 @@ namespace API_CRUD.Validator
     {
       RuleFor(user => user.name)
         .NotEmpty().WithMessage("Campo nome não pode estar vazio")
-        .Must(x =>
+        .Must(name =>
         {
           Regex regex = new Regex("[0-9]");
-          return !regex.IsMatch(x);
+          return !regex.IsMatch(name);
         }).WithMessage("Campo não pode conter números");
 
       RuleFor(user => user.cpf)
         .NotEmpty().WithMessage("Campo cpf não pode estar vazio")
-        .Must(x =>
+        .Must(cpf =>
           {
             Regex regex = new Regex("[a-zA-Z]");
-            return !regex.IsMatch(x.ToString());
+            return !regex.IsMatch(cpf.ToString());
           }).WithMessage("Campo não pode conter letras")
-          .Must(x =>
+          .Must(cpf =>
           {
-            return x.ToString().Length == 11;
+            return cpf.ToString().Length == 11;
           }).WithMessage("Numero inválido de caracteres no CPF")
           .NotEqual(00000000000).WithMessage("CPF inválido");
 
       RuleFor(user => user.email)
         .NotEmpty().WithMessage("O campo email não pode ser vazio")
-        .Must(x =>
+        .Must(email =>
         {
-          Regex regex = new Regex("@");
-          return regex.IsMatch(x);
-        }).WithMessage("Email não possui @");
+          return new EmailAddressAttribute().IsValid(email);
+        }).WithMessage("Email não é valido");
     }
   }
 }
