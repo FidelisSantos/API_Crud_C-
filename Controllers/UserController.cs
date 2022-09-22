@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using API_CRUD.Request;
 using API_CRUD.Models;
 using API_CRUD.Interfaces;
-using API_CRUD.Validator;
 using AutoMapper;
+using API_CRUD.View;
 
 namespace API_CRUD.Controller
 {
@@ -30,7 +30,8 @@ namespace API_CRUD.Controller
     public IActionResult FindAll()
     {
       var users = services.Search();
-      return (users == null || !users.Any() ? NotFound(notFoundAll) : Ok(users));
+      var userViews = _mapper.Map<List<UserView>>(users);
+      return (userViews == null || !userViews.Any() ? NotFound(notFoundAll) : Ok(userViews));
     }
 
     [HttpPost]
@@ -38,7 +39,8 @@ namespace API_CRUD.Controller
     {
       var model = _mapper.Map<UserModel>(newUserRequest);
       var newUser = services.Create(model);
-      return newUser != null ? Created("", newUser) : BadRequest();
+      var userView = _mapper.Map<UserView>(newUser);
+      return userView != null ? Created("", userView) : BadRequest();
     }
 
     [HttpGet]
@@ -46,7 +48,8 @@ namespace API_CRUD.Controller
     public IActionResult FindModel([FromRoute] string email)
     {
       var user = services.Search(email);
-      return user != null ? Ok(user) : NotFound(notFound);
+      var userView = _mapper.Map<UserView>(user);
+      return userView != null ? Ok(userView) : NotFound(notFound);
     }
 
     [HttpPut]
@@ -55,7 +58,8 @@ namespace API_CRUD.Controller
     {
       var model = _mapper.Map<UserModel>(updateUserRequest);
       var updateUser = services.Update(email, updateUserRequest.cpf, model);
-      return updateUser != null ? Ok(updateUser) : NotFound(notFound);
+      var userView = _mapper.Map<UserView>(updateUser);
+      return userView != null ? Ok(userView) : NotFound(notFound);
     }
 
     [HttpDelete]
@@ -63,7 +67,7 @@ namespace API_CRUD.Controller
     public IActionResult DeleteModel([FromRoute] string email)
     {
       bool delete = services.Delete(email);
-      return delete == true ? Ok() : BadRequest();
+      return delete == true ? Ok("Deletado") : BadRequest();
     }
   }
 }

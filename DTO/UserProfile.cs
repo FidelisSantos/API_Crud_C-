@@ -1,5 +1,6 @@
 using API_CRUD.Models;
 using API_CRUD.Request;
+using API_CRUD.View;
 using AutoMapper;
 
 namespace API_CRUD.DTO
@@ -10,6 +11,10 @@ namespace API_CRUD.DTO
     {
       CreateMap<UserRequest, UserModel>()
         .ReverseMap();
+
+      CreateMap<UserView, UserModel>()
+        .ReverseMap();
+
     }
   }
 }
